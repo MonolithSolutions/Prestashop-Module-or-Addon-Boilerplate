@@ -1,0 +1,80 @@
+<?php
+
+// Check if the module is defined in Prestashop
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
+// Create a class named "ExampleAddon" that extends the "Module" class
+class ExampleAddon extends Module
+{
+    // Constructor function
+    public function __construct()
+    {
+        // Assign the module name
+        $this->name = 'exampleaddon';
+        
+        // Assign the tab name to be displayed in the backend
+        $this->tab = 'front_office_features';
+        
+        // Assign the version number
+        $this->version = '1.0.0';
+        
+        // Assign the author name
+        $this->author = 'Author Name';
+        
+        // Set the need for an instance to 0
+        $this->need_instance = 0;
+        
+        // Specify the compliance with Prestashop versions
+        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+        
+        // Set the bootstrap to true
+        $this->bootstrap = true;
+
+        // Call the parent class's constructor
+        parent::__construct();
+
+        // Assign the display name
+        $this->displayName = $this->l('Example Addon');
+        
+        // Assign the description
+        $this->description = $this->l('This is a description of the example addon.');
+    }
+
+    // Function for installing the module
+    public function install()
+    {
+        // Check if the parent module was installed successfully and if the "displayHome" hook was registered
+        if (!parent::install() || !$this->registerHook('displayHome')) {
+            return false;
+        }
+
+        // Return true if the installation was successful
+        return true;
+    }
+
+    // Function for uninstalling the module
+    public function uninstall()
+    {
+        // Check if the parent module was uninstalled successfully
+        if (!parent::uninstall()) {
+            return false;
+        }
+
+        // Return true if the uninstallation was successful
+        return true;
+    }
+
+    // Function for the "displayHome" hook
+    public function hookDisplayHome($params)
+    {
+        // Assign the example variable to Smarty
+        $this->context->smarty->assign(array(
+            'example_variable' => 'Example value',
+        ));
+
+        // Display the "exampleaddon.tpl" file
+        return $this->display(__FILE__, 'exampleaddon.tpl');
+    }
+}
